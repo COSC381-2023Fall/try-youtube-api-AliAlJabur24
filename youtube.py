@@ -19,7 +19,22 @@ def youtube_search(query_term, max_results):
         maxResults=max_results,
     ).execute()
 
-    return search_response
+
+    videoList = []
+    # loop trough the results and check if there are items in the results; if search through []
+    for search_result in search_response.get('items', []):
+        # Make a dict of the relevant information we can pull from the result
+        video_Info = {
+            'videoId': search_result['id']['videoId'],
+            'title': search_result['snippet']['title'],
+            'description': search_result['snippet']['description'],
+            'thumbnail': search_result['snippet']['thumbnails']['default']['url'],
+            'publishedAt': search_result['snippet']['publishedAt']
+        }
+        # append the video information in the videoList
+        videoList.append(video_Info)
+    # return thee list of all the video dicts
+    return videoList
 
 if __name__ == "__main__":
     query_term = sys.argv[1]
